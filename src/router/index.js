@@ -86,6 +86,11 @@ const router = createRouter({
       component:()=>import("@/components/calculator.vue")
     },
     {
+      path:"/loading",
+      name:"loading",
+      component:()=>import("@/components/loading.vue")
+    },
+    {
       path:"/Link",
       name:"link",
       component:()=>import("@/components/link.vue")
@@ -94,6 +99,11 @@ const router = createRouter({
       path:"/Link2",
       name:"link2",
       component:()=>import("@/components/link2.vue")
+    },
+    {
+      path:"/GameStartandOver",
+      name:"GameStartandOver",
+      component:()=>import("@/component/GameStartandOver.vue")
     }
   ]
 });

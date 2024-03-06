@@ -7,32 +7,38 @@
         {
             "Question": "Text1",
             "Answer": "123",
-            "img":"cover_info.png"
+            "img": "cover_info.jpeg",
+            "img_alt":"this is alt text"
         },
         {
             "Question": "Text2",
             "Answer": "123",
-            "img":"cover_info.png"
+            "img": "cover_info.jpeg",
+            "img_alt":"this is alt text"
         },
         {
             "Question": "Text3",
             "Answer": "123",
-            "img":"cover_info.png"
+            "img": "cover_info.jpeg",
+            "img_alt":"this is alt text"
         },
         {
             "Question": "Text4",
             "Answer": "123",
-            "img":"cover_info.png"
+            "img": "cover_info.jpeg",
+            "img_alt":"this is alt text"
         },
         {
             "Question": "Text5",
             "Answer": "123",
-            "img":"cover_info.png"
+            "img":"cover_info.jepg",
+            "img_alt":"this is alt text"
         },
         {
             "Question": "Text6",
             "Answer": "123",
-            "img":"cover_info.png"
+            "img": "cover_info.jpeg",
+            "img_alt":"this is alt text"
         }
     ]
 }

@@ -3,31 +3,44 @@
     "introvideo": "src",
     "TotalLevel": 5,
     "GameType": "SelectGame",
+    "GameConfig":{
+
+    },
     "Questions": [
         {
             "Question": ["Question1","Question2","Question3","Question4","Question5"],
+            "Question_Text": "Chose the right answer",
             "Answer":  "Question1",
-            "img":"cover_info.jpeg"
+            "img":"cover_info.jpeg",
+            "img_alt": "This is alt"
         },
         {
             "Question": ["Question1","Question2","Question3","Question4","Question5"],
+            "Question_Text": "Chose the right answer",
             "Answer":  "Question2",
-            "img":"cover_info.jpeg"
+            "img":"cover_info.jpeg",
+            "img_alt": "This is alt"
         },
         {
             "Question": ["Question1","Question2","Question3","Question4","Question5"],
+            "Question_Text": "Chose the right answer",
             "Answer":  "Question3",
-            "img":"cover_info.jpeg"
+            "img":"cover_info.jpeg",
+            "img_alt": "This is alt"
         },
         {
             "Question": ["Question1","Question2","Question3","Question4","Question5"],
+            "Question_Text": "Chose the right answer",
             "Answer":  "Question4",
-            "img":"cover_info.jpeg"
+            "img":"cover_info.jpeg",
+            "img_alt": "This is alt"
         },
         {
             "Question": ["Question1","Question2","Question3","Question4","Question5"],
+            "Question_Text": "Chose the right answer",
             "Answer":  "Question5",
-            "img":"cover_info.jpeg"
+            "img":"cover_info.jpeg",
+            "img_alt": "This is alt"
         }
     ]
 }

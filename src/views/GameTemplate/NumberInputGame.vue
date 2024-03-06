@@ -4,17 +4,17 @@
         <div class="col-8">
             <div class="card">
                 <div class="card-body">
-                    <img class="card-img-top" :src="imageUrl" alt="Card image cap">
+                    <img class="card-img-top" :src="imageUrl" :alt="GameData.img_alt">
                 </div>
             </div>
         </div>
         <div class="col-4 align-self-center justify-content-center">
             <div class="card">
                 <div class="card-body">
-                    <p class="h2">{{ question }}</p>
+                    <p class="h2">{{ this.GameData.Question }}</p>
                 </div>
             </div>
-            <VirtualNumPad v-on:submit="GetSubmitData"></VirtualNumPad>
+            <VirtualNumPad v-on:submit="GetSubmitData" ref="VirtualNumPad"></VirtualNumPad>
         </div>
     </div>
 </div>
@@ -31,18 +31,18 @@ export default {
         };
     },
     props: {
-        imgsrc:{
-            type: String,
+        GameData: {
+            type: Object,
             required: true
         },
-        question: {
-            type: String,
+        GameConfig:{
+            type: Object,
             required: true
         },
-        answer: {
+        id:{
             type: String,
             required: true
-        }        //Other Game Methods
+        }
     },
     methods: {
         GetSubmitData(data){
@@ -50,15 +50,27 @@ export default {
             this.CheckAnswer(data);
         },
         CheckAnswer(data){
-            var response=CA.CheckTrueFalseAnswer(data,this.answer)
-            this.$emit('check-answer',response,);
+            var response=CA.CheckTrueFalseAnswer(data,this.GameData.Answer)
+            console.log(response);
+            if(response){
+                this.$emit('play-effect', 'CorrectSound',)
+                this.$emit('add-record',[this.answer, data,"正確"])
+                this.$refs.VirtualNumPad.delete_num();
+                this.$emit('next-question');
+            }
+            else{
+                this.$emit('play-effect', 'WrongSound',)
+                this.$emit('add-record',[this.answer, data,"錯誤"])
+                this.$refs.VirtualNumPad.delete_num();
+            }
+            // this.$emit('check-answer',response,);
         }
     },
     created() {
-        this.imageUrl=new URL(`../../assets/GamePic/${this.imgsrc}`, import.meta.url).href
-        console.log(this.imgsrc);
-        console.log(import.meta.url);
-        console.log(this.imageUrl);
+        this.imageUrl=new URL(`../../assets/Games/`+this.id+`/${this.GameData.img}`, import.meta.url).href
+        // console.log(this.imgsrc);
+        // console.log(import.meta.url);
+        // console.log(this.imageUrl);
     },
     components: {
         VirtualNumPad

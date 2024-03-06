@@ -14,7 +14,7 @@
             </div>
             <div class="col-5">
 
-                <h1>{{ answer[0].GroupName }}</h1>
+                <h1>{{ this.GameData.Answer[0].GroupName }}</h1>
                 <div class="row">
                     <draggable :list="Group1" group="SelectItem" class="card">
                         <template #item="{ element }">
@@ -23,7 +23,7 @@
                     </draggable>
                 </div>
 
-                <h1>{{ answer[1].GroupName }}</h1>
+                <h1>{{ this.GameData.Answer[1].GroupName }}</h1>
                 <div class="row">
                     <draggable :list="Group2" group="SelectItem" class="card">
                         <template #item="{ element }">
@@ -80,12 +80,16 @@ export default {
         draggable
     },
     props: {
-        question: {
-            type: Array,
+        GameData: {
+          type: Object,
+          required: true
+        },
+        GameConfig:{
+            type: Object,
             required: true
         },
-        answer: {
-            type: Array,
+        id:{
+            type: String,
             required: true
         }
     },
@@ -99,24 +103,26 @@ export default {
         }
     },
     created(){
-        this.QuestionWord=this.question[0].Question
+        this.QuestionWord=this.GameData.Question[0].Question
+        // this.QuestionWord=this.question[0].Question
         console.log(this.QuestionWord)
-        for(var i=1;i<this.question.length;i++){
-            this.Items.push(this.question[i].text)
+        for(var i=1;i<this.GameData.Question.length;i++){
+            this.Items.push(this.GameData.Question[i].text)
         }
     },
     methods: {
         CheckAnswer(){
+
             // This code will walk through all the groups and check if the answer is right
             // Only when all the groups are right, the game will return true.
-            if(this.Group1.length==this.answer[0]["Items"].length && this.Group2.length==this.answer[1]["Items"].length){
+            if(this.Group1.length==this.GameData.Answer[0]["Items"].length && this.Group2.length==this.GameData.Answer[1]["Items"].length){
                 var Group1Status=true
                 var Group1Check=0
                 var Group2Status=true
                 var Group2Check=0
                 for(var i in this.Group1){
-                    for(var z in this.answer[0]["Items"]){
-                        if(this.Group1[i]==this.answer[0]["Items"][z]){
+                    for(var z in this.GameData.Answer[0]["Items"]){
+                        if(this.Group1[i]==this.GameData.Answer[0]["Items"][z]){
                             Group1Check=1
                             break
                         }
@@ -126,8 +132,8 @@ export default {
                     }
                 }
                 for(var i in this.Group2){
-                    for(var z in this.answer[1]["Items"]){
-                        if(this.Group2[i]==this.answer[1]["Items"][z]){
+                    for(var z in this.GameData.Answer[1]["Items"]){
+                        if(this.Group2[i]==this.GameData.Answer[1]["Items"][z]){
                             Group2Check=1
                             break
                         }
@@ -136,18 +142,25 @@ export default {
                         Group2Status=false
                     }
                 }
+                let user_ans =[this.Group1,this.Group2]
+                let correct_ans = [this.GameData.Answer[0]["Items"],this.GameData.Answer[1]["Items"]]
                 if(Group1Status && Group2Status == true){
                     console.log('ClassifyGame CheckAnswer :Right')
-                    this.$emit('check-answer',true)
+                    this.$emit('play-effect', 'CorrectSound',)
+                    this.$emit('add-record',[user_ans, correct_ans,"正確"])
+                    this.$emit('next-question');
                 }
                 else{
                     console.log('ClassifyGame CheckAnswer :Wrong')
-                    this.$emit('check-answer',false)
+                    this.$emit('play-effect', 'WrongSound',)
+                    this.$emit('add-record',[user_ans, correct_ans,"錯誤"])
+
                 }
             }
             else{
                 console.log('ClassifyGame CheckAnswer :Wrong')
-                this.$emit('check-answer',false)
+                this.$emit('play-effect', 'WrongSound',)
+                this.$emit('add-record',[user_ans, correct_ans,"錯誤"])
             }
         }
     }

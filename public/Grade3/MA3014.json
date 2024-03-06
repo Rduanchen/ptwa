@@ -4,6 +4,9 @@
     "TotalLevel": 5,
     "GameType": "ClassifyGame",
     "ItemsWithImage": true,
+    "GameConfig":{
+
+    },
     "Questions": [
         {   
             "Question": [

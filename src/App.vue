@@ -12,7 +12,7 @@ export default {
   name: 'App',
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .navbar {
   background-color: #57B9D9; 
   height: 10vh; 

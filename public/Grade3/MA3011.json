@@ -2,7 +2,10 @@
     "id": "MA3011",
     "introvideo": "src",
     "TotalLevel": 5,
-    "GameType": "TrueFalse",
+    "GameType": "TrueFalseGame",
+    "GameConfig": {
+        "Testmsg": "Test your knowledge"
+    },
     "Questions": [
         {
             "Question": "Text1",
