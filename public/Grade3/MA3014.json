@@ -1,44 +1,53 @@
 {
     "id": "MA3014",
     "introvideo": "src",
-    "TotalLevel": 5,
+    "TotalLevel": 1,
     "GameType": "ClassifyGame",
     "ItemsWithImage": true,
+    "GameConfig":{
+
+    },
     "Questions": [
         {   
             "Question": [
                 {
-                    "Question":"請將下列物品分類"
+                    "Question":"請將下垃圾進行分類",
+                    "InitBox":"未分類的垃圾"
                 },
                 {
-                    "text": "1",
-                    "img": "../../assets/images/pics/cover_info.png"
+                    "text": "寶特瓶",
+                    "img": "1-1.jpg",
+                    "alt": "寶特瓶"
                 },
                 {
-                    "text": "2",
-                    "img": "../../assets/images/pics/cover_info.png"
+                    "text": "鐵鋁罐",
+                    "img": "1-2.jpeg",
+                    "alt": "鐵鋁罐"
                 },
                 {
-                    "text": "3",
-                    "img": "../../assets/images/pics/cover_info.png"
+                    "text": "鋁箔包",
+                    "img": "1-3.jpeg",
+                    "alt": "鋁箔包"
                 },
                 {
-                    "text": "4",
-                    "img": "../../assets/images/pics/cover_info.png"
+                    "text": "衛生紙",
+                    "img": "1-4.png",
+                    "alt": "衛生紙"
                 },
                 {
-                    "text": "5",
-                    "img": "../../assets/images/pics/cover_info.png"
+                    "text": "橡皮筋",
+                    "img": "1-5.jpg",
+                    "alt": "橡皮筋"
                 }
             ],
             "Answer": [
                 {
-                    "GroupName": "組別目前只能兩個",
-                    "Items":["1","2","3"]
+                    "GroupName": "一般垃圾",
+                    "Items":["衛生紙","橡皮筋"]
                 },
                 {
-                    "GroupName": "未加上照片功能",
-                    "Items":["4","5"]
+                    "GroupName": "資源回收物",
+                    "Items":["寶特瓶","鐵鋁罐","鋁箔包"]
                 }
             ]
         }

@@ -3,14 +3,18 @@
         <br>
         <br>
         <div class="container">
-            <canvas ref="canvas" width="700" height="400"></canvas>
-            <p class="h3">{{ this.question.Text }}</p>
-            <p class="h5">請點擊下方的按鈕選擇答案</p>
-            <div id="error_msg">{{ errorMsg }}</div>
-            <div class="d-flex flex-row  flex-wrap">
-                <button v-for="(items,index) in btn" class="btn btn-primary m-1 flex-grow-1" @click="judgeAnswer(items)">
-                    {{ items }}
-                </button>
+            <div class="d-flex justify-content-between flex-row">
+                <canvas ref="canvas" width="700" height="400"></canvas>
+                <div class="optionbar d-flex flex-column justify-content-center align-self-center" style="width: 100%;">
+                    <p class="h3">{{ this.GameData.Question.Text }}</p>
+                    <p class="h5">{{ this.GameConfig.OptionBarText }}</p>
+                    <div id="error_msg">{{ errorMsg }}</div>
+                    <div class="d-flex flex-column justify-content-center align-self-center d-gap gap-2 p-3" style="width: 100%;">
+                        <button v-for="(items,index) in btn" class="btn btn-primary" @click="judgeAnswer(items)">
+                            {{ items }}
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -44,7 +48,7 @@
     },
 **/
 
-import Desribepng from '@/assets/GamePic/Source/description.png';
+import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 export default {
     name: 'AutoNumberingGame',
     data() {
@@ -67,22 +71,27 @@ export default {
         };
     },
     props: {
-        question: {
+        GameData: {
             type: Object,
             required: true
         },
-        answer: {
-            type: Array,
+        GameConfig:{
+            type: Object,
+            required: true
+        },
+        id:{
+            type: String,
             required: true
         }
     },
     created() {
+        
         // this.picture_type="sth"//FIXME
-        this.QuestionRange = this.question.Range;
-        for (var i in this.question.ObjImgList) {
+        this.QuestionRange = this.GameData.Question.Range;
+        for (var i in this.GameData.Question.ObjImgList) {
             this.picture_total += 1;
         }
-        for(var i=this.question.Range[0];i<=this.question.Range[1];i++){
+        for(var i=this.GameData.Question.Range[0];i<=this.GameData.Question.Range[1];i++){
             this.btn.push(i);
         }
     },
@@ -93,7 +102,13 @@ export default {
         //bind error text
         this.error_text = document.getElementById("error_msg");
         //load description image FIXME:This is a temporary solution, will be removed in the future
-        this.loadDescriptionImage();
+        var start = true;
+        if (start === true) {
+            this.clearCanvas();
+            this.randomPicturePosition();
+            start = false;
+        }
+        // this.loadDescriptionImage();
     },
     methods: {
         getRandPicture() {
@@ -101,8 +116,12 @@ export default {
              * Get random picture from the folder
              * @return {string} b - The path of the picture
              */
-            const num = Math.floor(Math.random() * this.question.ObjImgList.length) + 0; //Random number(Range: 0~picture_total-1)
-            var b = new URL(`../../assets/GamePic/${this.question.Root}/S_${this.question.ObjImgList[num]}${this.picture_type}`, import.meta.url).href; //load picture
+            const num = Math.floor(Math.random() * this.GameData.Question.ObjImgList.length) + 0; //Random number(Range: 0~picture_total-1)
+            // var b = new URL(`../../assets/Games/`+this.id+`/S_${this.GameData.Question.ObjImgList[num]}${this.picture_type}`, import.meta.url).href; //load picture
+            var name ='S_'+this.GameData.Question.ObjImgList[num]+this.picture_type;
+            var b = GamesGetAssetsFile(this.id,name);
+            
+            console.log(b);
             return b
         },
         randomPicturePosition() {
@@ -110,7 +129,7 @@ export default {
              * 1. Random the position of the picture
              * 2. Draw the picture on the canvas
              */
-            var numImages = Math.floor(Math.random() * (this.question.Range[1]-this.question.Range[0])) + this.question.Range[0];
+            var numImages = Math.floor(Math.random() * (this.GameData.Question.Range[1]-this.GameData.Question.Range[0])) + this.GameData.Question.Range[0];
             const image = new Image();
             this.exist_image = 0;
             image.src = this.getRandPicture();
@@ -170,6 +189,8 @@ export default {
             //FIXME Wait for add Hint Swith
             if (num === this.exist_image) {
                 console.log("Correct");
+                this.$emit('play-effect', 'CorrectSound');
+                this.$emit('add-record',[this.exist_image, num,"正確"]);
                 this.newGame();
             } else if (this.wrong_time >= 3) {
                 this.errorMsg = "請根據提示回答答案";
@@ -177,6 +198,8 @@ export default {
             } else {
                 num = 3 - this.wrong_time;
                 this.errorMsg = `錯誤，請再試一次，剩餘${num}次機會`;
+                this.$emit('play-effect', 'WrongSound');
+                this.$emit('add-record',[this.exist_image, num,"錯誤"]);
                 this.wrong_time += 1;
             }
         },
@@ -197,48 +220,36 @@ export default {
             /**
              * If the player win the game, the game will show the message and reload the game
              * FIXME: Wait for add the level system, this game is endless now.
-             */
-            if (this.level == this.question.Level) {
-                setTimeout(() => {
-                    location.reload();
-                }, 3000);
-            }
+            */  
+            this.$emit('play-effect', 'HarrySound');
+            this.$emit('next-question')
+            // setTimeout(() => {
+            //         // location.reload();
+            //         this.$emit('play-effect', 'HarrySound');
+            //         this.$emit('next-question')
+            //     }, 3000);
+            // if (this.level == this.GameData.Question.Level) {
+
+            // }
         },
         newGame() {
             /**
              * Start a new game
              */
             this.level += 1;
-            this.win();
-            this.errorMsg = "";
-            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.context.font = '24px Arial';
-            this.context.fillStyle = 'black';
-            this.context.fillText('答對了', this.canvas.width / 2 - 50, this.canvas.height / 2);
-            setTimeout(this.clearCanvas, 1500);
-            setTimeout(this.randomPicturePosition, 1500);
-        },
-        loadDescriptionImage() {
-            /**
-             * Load the description image
-             * If the image was clicked, the game will start
-             */
-            var start = true;
-            const img = new Image();
-            img.src = new URL(`../../assets/GamePic/${this.question.Root}/description.png`, import.meta.url).href;
-            img.onload = () => {
-                const scale = this.canvas.width / img.width;
-                const height = img.height * scale;
+            if (this.level == this.GameData.Question.Level){
+                this.win();
+            }
+                
+            else{
+                this.errorMsg = "";
                 this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                this.context.drawImage(img, 0, 0, this.canvas.width, height);
-                this.canvas.addEventListener('click', () => {
-                    if (start === true) {
-                        this.clearCanvas();
-                        this.randomPicturePosition();
-                        start = false;
-                    }
-                });
-            };
+                this.context.font = '24px Arial';
+                this.context.fillStyle = 'black';
+                this.context.fillText('答對了', this.canvas.width / 2 - 50, this.canvas.height / 2);
+                setTimeout(this.clearCanvas, 1500);
+                setTimeout(this.randomPicturePosition, 1500);
+            }
         },
     },
 };

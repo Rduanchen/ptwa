@@ -1,4 +1,5 @@
 <template>
+    <!-- {{ this.DotLocation }} -->
     <div class="canvas-container">
         <canvas id="myCanvas" class="position-absolute"></canvas>
         <canvas ref="myCanvas2" id="canvas2" class="position-absolute"></canvas>
@@ -7,7 +8,23 @@
     </template>
     <script>
     import icon from '@/assets/GamePic/Cat.png';
+import FindTheItemGame from '../views/GameTemplate/FindTheItemGame.vue';
     export default {
+        props: {
+            GameData: {
+                type: Object,
+                required: true
+            },
+            GameConfig:{
+                type: Object,
+                required: true
+            },
+            id:{
+                type: String,
+                required: true
+            }
+        },
+        emits: ['play-effect','add-record','next-question'],
         data(){
             return{
                 border: 30,
@@ -41,7 +58,6 @@
                 OnclickLocation:[],
                 TotalAmount:0,
                 Runtimes:0,
-    
             }
         },
         mounted() {
@@ -55,6 +71,7 @@
             // this.DrawReaizesImgOnCanvas(context1,icon,3);
             var img = new Image();
             img.src = icon;
+            // img.src = new URL(`../../assets/GamePic/Cat.png`, import.meta.url).href;
             img.onload= () => {
                 this.DrawImgOnRow(context1,img,this.QuestionDataStructure);
             }
@@ -118,7 +135,6 @@
     
                 // 設定新的圖片來源
                 resizedImg.src = img.src;
-    
                 console.log("Resized Image's Height:"+resizedImg.height);
                 return resizedImg;
             },
@@ -159,8 +175,6 @@
                             context.arc((bais+resizedImg.width+this.border), (height+(resizedImg.height/2)), this.DotRadius, 0, 2 * Math.PI, false);
                             this.DotLocation.push([[RowID,this.group+1,this.index],[(bais+resizedImg.width+this.border-(this.DotRadius/2)-Sensitive),(height+(resizedImg.height/2)-(this.DotRadius/2)-Sensitive)],[(bais+resizedImg.width+this.border+(this.DotRadius/2)+Sensitive),(height+(resizedImg.height/2)+(this.DotRadius/2)+Sensitive)]])
                             this.group=this.group-1;
-                            
-                            
                         }
                         else{
                             context.arc((bais-this.border), (height+(resizedImg.height/2)), this.DotRadius, 0, 2 * Math.PI, false);
@@ -334,18 +348,27 @@
                     this.Runtimes=this.Runtimes+1;
                     if(this.Runtimes==this.TotalAmount){
                         this.GameOver();
+                        this.$emit('play-effect', 'CorrectSound',)
+                        // this.$emit('add-record',[[[row,index],[]],[row,index],"正確"])
+                        this.$emit('add-record',["","","正確"])
+
                     }
                     return true;
                 }
                 else{
                     console.log("Link Template Return Wrong");
+                    this.$emit('play-effect', 'WrongSound',)
+                    this.$emit('add-record',["","","錯誤"])
                     return false;
                 }
     
             },
             GameOver(){
                 console.log("Component 'Link' post GameOver,All Answer Right")
-                this.$emit('check-answer',true);
+                // this.$emit('check-answer',true);
+                this.$emit('play-effect', 'CorrectSound',)
+                this.$emit('add-record',["","","全對"])
+                this.$emit('next-question');
             }
             
         }
@@ -359,13 +382,6 @@
         flex-direction: column; /* 子元素垂直排列 */
         align-items: center; /* 子元素水平居中 */
         position: relative; /* 相對定位，作為子元素的定位參考 */
-    }
-    
-    canvas {
-        border: 1px solid #000;
-        position: absolute; /* 絕對定位來疊加 */
-        top: 0;
-        left: 0;
     }
     
     #myButton {

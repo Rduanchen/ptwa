@@ -3,18 +3,18 @@
     <div class="row">
         <div class="col-8">
             <div class="card">
-                <div class="card-body">
-                    <img class="card-img-top" :src="imageUrl" alt="Card image cap">
+                <div class="card-body d-flex justify-content-center">
+                    <img class="card-img-top GameImg" :src="imageUrl" :alt="GameData.img_alt">
                 </div>
             </div>
         </div>
         <div class="col-4 align-self-center justify-content-center">
             <div class="card">
                 <div class="card-body">
-                    <p class="h2">{{ question }}</p>
+                    <p class="h2">{{ this.GameData.Question }}</p>
                 </div>
             </div>
-            <VirtualNumPad v-on:submit="GetSubmitData"></VirtualNumPad>
+            <VirtualNumPad v-on:submit="GetSubmitData" ref="VirtualNumPad"></VirtualNumPad>
         </div>
     </div>
 </div>
@@ -22,7 +22,7 @@
 
 <script>
 import VirtualNumPad from '@/components/VirtualNumPad.vue'; 
-import * as CA from '@/utilitys/CheckAnswer.js';
+import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 export default {
     name: 'NumberInputGame',
     data() {
@@ -31,18 +31,18 @@ export default {
         };
     },
     props: {
-        imgsrc:{
-            type: String,
+        GameData: {
+            type: Object,
             required: true
         },
-        question: {
-            type: String,
+        GameConfig:{
+            type: Object,
             required: true
         },
-        answer: {
+        id:{
             type: String,
             required: true
-        }        //Other Game Methods
+        }
     },
     methods: {
         GetSubmitData(data){
@@ -50,15 +50,29 @@ export default {
             this.CheckAnswer(data);
         },
         CheckAnswer(data){
-            var response=CA.CheckTrueFalseAnswer(data,this.answer)
-            this.$emit('check-answer',response,);
+            var response=false;
+            if(data == this.GameData.Answer){
+                response=true;
+            }
+            else{
+                response=false;
+            }
+            console.log(response);
+            if(response){
+                this.$emit('play-effect', 'CorrectSound',)
+                this.$emit('add-record',[this.answer, data,"正確"])
+                this.$refs.VirtualNumPad.delete_num();
+                this.$emit('next-question');
+            }
+            else{
+                this.$emit('play-effect', 'WrongSound',)
+                this.$emit('add-record',[this.answer, data,"錯誤"])
+                this.$refs.VirtualNumPad.delete_num();
+            }
         }
     },
     created() {
-        this.imageUrl=new URL(`../../assets/GamePic/${this.imgsrc}`, import.meta.url).href
-        console.log(this.imgsrc);
-        console.log(import.meta.url);
-        console.log(this.imageUrl);
+        this.imageUrl=GamesGetAssetsFile(this.id,this.GameData.img)
     },
     components: {
         VirtualNumPad
@@ -68,4 +82,9 @@ export default {
 
 <style scoped>
 /* Your component styles go here */
+.GameImg{
+    overflow: hidden;
+    height: 60vh;
+    width: auto;
+}
 </style>

@@ -1,33 +1,51 @@
 {
     "id": "MA3011",
-    "introvideo": "src",
+    "introvideo": "hint1.mp4",
+    "IntroText": {
+        "Type": "PlainText",
+        "Content": "小明剛剛學會看時鐘，但是他在寫作業的時候忘記了部分的答案，請聰明的你/妳幫助小明檢查答案"
+    },
     "TotalLevel": 5,
-    "GameType": "TrueFalse",
+    "GameType": "TrueFalseGame",
+    "GameConfig": {
+        "GlobalTitle": "請問以下的時間正確嗎?"
+    },
+    "Hint":{
+        "ShowAs" : "Single",
+        "Rule" : {
+            "RuleType": "WrongTimes",
+            "Value":  2
+        },
+        "Data" :{
+            "SourceType" : "video",
+            "FilePath" : "hint1.mp4"
+        }
+    },
     "Questions": [
         {
-            "Question": "Text1",
-            "Answer": true,
-            "img": "cover_info.jpeg"
+            "Question": "1:40",
+            "Answer": false,
+            "img": "level1.png"
         },
         {
-            "Question": "Text2",
+            "Question": "1:25",
             "Answer": true,
-            "img":"cover_info.jpeg"
+            "img":"level2.png"
         },
         {
-            "Question": "Text3",
-            "Answer": true,
-            "img":"cover_info.jpeg"
+            "Question": "1:20",
+            "Answer": false,
+            "img":"level3.png"
         },
         {
-            "Question": "Text4",
+            "Question": "5:40",
             "Answer": true,
-            "img":"cover_info.jpeg"
+            "img":"level4.png"
         },
         {
-            "Question": "Text5",
+            "Question": "7:00",
             "Answer": true,
-            "img":"cover_info.jpeg"
+            "img":"level5.png"
         }
     ]
 }

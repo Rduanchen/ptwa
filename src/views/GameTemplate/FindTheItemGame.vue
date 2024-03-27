@@ -1,11 +1,7 @@
 <template>
 <div class="container">
-<div class="justify-content-center">
-    <div class="card mb-2">
-        <div class="card-body">
-            {{ question.Text }}
-        </div>
-    </div>
+<!-- <div class="justify-content-center">
+    <p class="h1">{{ this.GameData.Question.Text }}</p>
     <canvas id="cvs" class="center" width="800" height="600" style="border: 1px solid #000" v-on:click="judge_position($event)"></canvas>
     <p class="h4">尚未被找到的:</p>
     <div class="d-flex flex-row  flex-wrap">
@@ -13,10 +9,24 @@
         {{ button }}
       </button>
     </div>
+</div> -->
+<p class="h1">{{ this.GameData.Question.Text }}</p>
+<div class="d-flex flex-row justify-content-between">
+    <canvas id="cvs" class="center" width="800" height="600" style="border: 1px solid #000" v-on:click="judge_position($event)"></canvas>
+    <div class="objlistbar">
+        <p class="h4">尚未被找到的:</p>
+        <div class="d-flex flex-column  flex-wrap">
+            <button v-for="(button,index) in btn" class="btn btn-primary m-1 flex-grow-1" :class="{'active-button': answered[index]==0} ">
+                {{ button }}
+            </button>
+        </div>
+    </div>
 </div>
+
 </div>
 </template>
 <script>
+import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 export default {
     name: 'FindTheItem',
     data(){
@@ -29,33 +39,34 @@ export default {
         }
     },
     props: {
-        imgsrc:{
-            type: String,
-            required: true
+        GameData: {
+          type: Object,
+          required: true
         },
-        question: {
+        GameConfig:{
             type: Object,
             required: true
         },
-        answer: {
-            type: Array,
+        id:{
+            type: String,
             required: true
-        },
+        }
         //Other Game Methods
     },
     created() {
-        for(var i=0; i<this.question["ObjNum"]; i++){
+        // this.question=this.GameData.Question;
+        for(var i=0; i<this.GameData.Question["ObjNum"]; i++){
             this.answered.push(0);
         }
-        for(var i in this.question.ObjName){
-            this.btn[i]=this.question.ObjName[i];
+        for(var i in this.GameData.Question.ObjName){
+            this.btn[i]=this.GameData.Question.ObjName[i];
         }
     },
     mounted(){
         var cvs=document.getElementById("cvs");
         const ctx=cvs.getContext('2d');
         var img=new Image();
-        img.src=this.imageUrl=new URL(`../../assets/GamePic/${this.imgsrc}`, import.meta.url).href
+        img.src=GamesGetAssetsFile(this.GameData.img);
         img.addEventListener("load", function() {
             ctx.drawImage(this,0,0,cvs.width,cvs.height);
         }, false);
@@ -63,8 +74,8 @@ export default {
         var posX = $('#cvs').offset().left;
         var posY = $('#cvs').offset().top;
         console.log("page offset:",posX,posY);
-        this.ObjPosition=this.question["ObjLocation"];
-        this.ObjPositionRange=this.answer;
+        this.ObjPosition=this.GameData.Question["ObjLocation"];
+        this.ObjPositionRange=this.GameData.Answer;
     },
     methods:{
         outCircle(x,y){
@@ -110,6 +121,8 @@ export default {
             //draw circle
             // record_time_data(num);
             // playAudio(num);//Play Right Answer Sound
+            this.$emit('play-effect', 'CorrectSound')
+            this.$emit('add-record',[num,"被找到","正確"])
             this.outCircle(this.ObjPosition[num][0],this.ObjPosition[num][1]);
             $("#bt-"+num).css("background-color","gray")
             this.detect_win(num);
@@ -128,7 +141,9 @@ export default {
         },
         win(){
             console.log("FindTheItemGame CheckAnswer :Wrong")
-            this.$emit('check-answer',true);
+            this.$emit('play-effect', 'HarraySound')
+            this.$emit('add-record',["全對","","正確"])
+            this.$emit('next-question',true);
         }
         
     }

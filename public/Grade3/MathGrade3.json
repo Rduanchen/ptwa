@@ -1,69 +1,69 @@
 {
     "Unit_0": {
-        "Title": "20000以內的數",
+        "Title": "基礎數學",
         "Section": {
             "S-1": {
-                "Title": "數到20000",
+                "Title": "第一章",
                 "Games": {
                     "MA3011": {
                         "id": "MA3011",
-                        "Name": "將相同的數字對應圖片連在一起",
-                        "Description": "找出相同數字對應的圖片並連接起來",
-                        "Img": " "
+                        "Name": "認識時鐘",
+                        "Description": "找找看現在幾點呢?",
+                        "Img": "MA3011.png"
                     },
                     "MA3012": {
                         "id": "MA3012",
-                        "Name": "累加、累減找找看",
-                        "Description": "找出數字在哪裡",
-                        "Img": " "
+                        "Name": "認識鈍角、銳角、直角",
+                        "Description": "想想看圖片中的角度是幾度呢?",
+                        "Img": "MA3012.png"
                     },
                     "MA3013": {
                         "id": "MA3013",
-                        "Name": "數字排序",
-                        "Description": "將數字按照大小順序排列",
-                        "Img": " "
+                        "Name": "面積",
+                        "Description": "看看方格板上面的積木幾平方公分呢?",
+                        "Img": "MA3013.png"
                     },
                     "MA3014": {
                         "id": "MA3014",
                         "Name": "數字填空",
                         "Description": "根據提示填入正確的數字",
-                        "Img": " "
+                        "Img": "MA3014.png"
                     },
                     "MA3015": {
                         "id": "MA3015",
-                        "Name": "數字選擇",
-                        "Description": "從給定的選項中選擇正確的數字",
-                        "Img": " "
+                        "Name": "比大小",
+                        "Description": "用拖曳的方式來排出數字的大小",
+                        "Img": "MA3015.png"
                     },
                     "MA3016": {
                         "id": "MA3016",
-                        "Name": "數字連線",
-                        "Description": "連接相同數字的線段",
-                        "Img": " "
+                        "Name": "找找看",
+                        "Description": "找出躲藏在圖片中的數字吧",
+                        "Img": "MA3016.png"
                     },
                     "MA3017": {
                         "id": "MA3017",
-                        "Name": "數字拼圖",
-                        "Description": "將數字拼湊成完整的圖案",
-                        "Img": " "
+                        "Name": "數數看",
+                        "Description": "數出圖片中有幾個物品吧",
+                        "Img": "MA3017.png"
                     },
                     "MA3018": {
                         "id": "MA3018",
-                        "Name": "數字記憶",
-                        "Description": "記憶數字的順序",
-                        "Img": " "
+                        "Name": "數數看",
+                        "Description": "數出圖片中有幾個物品吧",
+                        "Img": "MA3018.png"
                     },
                     "MA3019": {
                         "id": "MA3019",
                         "Name": "數字遊戲",
                         "Description": "玩遊戲學習數字",
-                        "Img": " "
+                        "Img": "cover_info.jpeg"
                     },
                     "MA3020": {
                         "id": "MA3020",
                         "Name": "數字測驗",
                         "Description": "測試對數字的認識程度",
-                        "Img": " "
+                        "Img": "cover_info.jpeg"
                     }
                 }
             },

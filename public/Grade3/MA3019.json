@@ -2,24 +2,24 @@
     "id": "MA3019",
     "introvideo": "src",
     "TotalLevel": 1,
-    "GameType": "NumberingGame",
-    "ConfigParameters":{
+    "GameType": "LinkGame",
+    "GameConfig":{
         
     },
     "Questions": [
         {   
             "Question": {
-                "text": "請數數看題目中有多少支棒棒糖",
-                "TotalRow":3,
-                "RowData":[["/assets/GamePic/Cat.png","/assets/GamePic/Cat.png","/assets/GamePic/Cat.png","/assets/GamePic/Cat.png"],
-                           ["/assets/GamePic/Cat.png","/assets/GamePic/Cat.png","/assets/GamePic/Cat.png","/assets/GamePic/Cat.png"],
-                           ["/assets/GamePic/Cat.png","/assets/GamePic/Cat.png","/assets/GamePic/Cat.png","/assets/GamePic/Cat.png"]
-                        ]
+                "text": "題目文字",
+                "RowData":[
+                    ["assets/GamePic/Cat.png","assets/GamePic/Cat.png","assets/GamePic/Cat.png"],
+                    ["assets/GamePic/Cat.png","assets/GamePic/Cat.png","assets/GamePic/Cat.png","assets/GamePic/Cat.png","assets/GamePic/Cat.png"],
+                    ["assets/GamePic/Cat.png","assets/GamePic/Cat.png"]
+                ]
             },
             "Answer": [
-                [[1,0],[2,0]],
-                [[1,2],[2,2]],
-                [[1,3],[2,1]]
+                [[0,0],[1,0]],
+                [[0,1],[1,2]],
+                [[0,2],[1,1]]
             ]
         }
     ]

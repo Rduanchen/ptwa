@@ -3,20 +3,20 @@
     "introvideo": "src",
     "TotalLevel": 1,
     "GameType": "AutoNumberingGame",
-    "ConfigParameters":{
+    "GameConfig":{
         "background":true,
         "GiveHint":true,
         "InsideLevel":true,
-        "ImgType":"png"
+        "ImgType":"png",
+        "OptionBarText":"請點擊下方的按鈕選擇答案"
     },
     "Questions": [
         {   
             "Question": {
                 "Text": "數數看上面有幾個物品",
-                "Root": "Source",
                 "ObjImgList": ["1", "2", "3", "4", "5", "6"],
                 "Range":[4,10],
-                "Level": 6
+                "Level": 3
             },
             "Answer": [
             ]

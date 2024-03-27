@@ -1,17 +1,40 @@
 {
     "id": "MA3015",
     "introvideo": "src",
-    "TotalLevel": 1,
+    "TotalLevel": 3,
     "GameType": "SortGame",
+    "GameConfig":{
+        "auto-rand":true
+    },
     "Questions": [
         {   
             "Question": {
-                "text":"請排序",
+                "text":"請將下面的數字由小排到大",
                 "randomswitch":true,
-                "options":["How","are","you","?"]
+                "options":["10","4","8","17"]
             },
             "Answer": [
-                "How","are","you","?"
+                "4","8","10","17"
+            ]
+        },
+        {
+            "Question": {
+                "text":"請將下面的數字由小排到大",
+                "randomswitch":true,
+                "options":["20","12","19","3"]
+            },
+            "Answer": [
+                "3","12","19","20"
+            ]
+        },
+        {
+            "Question": {
+                "text":"請將下面的數字由小排到大",
+                "randomswitch":true,
+                "options":["30","27","22","15"]
+            },
+            "Answer": [
+                "15","22","27","30"
             ]
         }
     ]

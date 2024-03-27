@@ -1,15 +1,15 @@
 <template>
 <div class="container">
-    <h1>{{ QuestionWord }}</h1>
+    <h1>{{ this.GameData.Question.text }}</h1>
     <hr>
-    <draggable :list="options" group="Sentense" >
+    <draggable :list="options" group="Sentense">
         <template #item="{ element }">
         <button type="button" class="btn btn-primary m-1 my-btn">{{ element }}</button>
         </template>
     </draggable>
     <br>
     <hr>
-    <button type="button" class="btn btn-primary btn-lg btn-block" v-on:click="CheckAnswer()">Submit</button>
+    <button type="button" class="btn btn-primary btn-lg btn-block" @click="CheckAnswer()">Submit</button>
 </div>
 </template>
 
@@ -21,35 +21,67 @@ export default {
         draggable
     },
     props: {
-        question: {
+        GameData: {
             type: Object,
             required: true
         },
-        answer: {
-            type: Array,
+        GameConfig:{
+            type: Object,
+            required: true
+        },
+        id:{
+            type: String,
             required: true
         }
     },
     data() {
         return {
             QuestionWord: '',
-            options:[]
+            options:[],
+            show: false,
+            question: null,
+            // answer: null
         }
     },
     created(){
-        this.QuestionWord=this.question.text
-        if(this.question.randomswitch==true){
-            var rand=this.CheckAnswer()
-            do{
-                this.question.options.sort(() => Math.random() - 0.5);
-                rand=this.CheckAnswer()
-            }while(rand==true)
-        }//打亂陣列
-        for(var i in this.question.options){
-            this.options.push(this.question.options[i])
-        }
+        this.UpdateQuestion();
+        // setInterval(this.IntervalCheckUpdate, 500);
     },
     methods: {
+        UpdateQuestion(){
+            this.answer = this.GameData.Answer;
+            this.question = this.GameData.Question.options;
+            this.RandomtheList();
+            let randed = this.Checkrand();
+            while(randed==false){
+                this.RandomtheList();
+                randed = this.Checkrand();
+            }
+            this.options = [];
+            for(var i in this.question){
+                this.options.push(this.question[i])
+            }
+            console.log(this.question, this.options, this.answer)
+        },
+        RandomtheList(){
+            this.question.sort(() => Math.random() - 0.5);
+        },
+        Checkrand(){
+            let list1="";
+            let list2="";
+            for(var i in this.question){
+                list1+=this.question[i];
+            }
+            for(var i in this.answer){
+                list2+=this.answer[i];
+            }
+            if (list1==list2){
+                return false                
+            }
+            else{
+                return true
+            }
+        },
         CheckAnswer(){
             var AnswerCheck=true
             for(var i in this.answer){
@@ -59,13 +91,18 @@ export default {
             }
             if(AnswerCheck==true){
                 console.log("SortGame ChenckAnswer: Right")
-                this.$emit('check-answer',true);
-                return true
+                this.show = false;
+                this.$emit('play-effect', 'CorrectSound')
+                this.$emit('add-record',[this.GameData.Answer, this.options,"正確"])
+                this.$emit('next-question');        
+                setTimeout(this.UpdateQuestion, 100);
+                this.UpdateQuestion();
             }
             else{
                 console.log("SortGame ChenckAnswer: Wrong")
-                this.$emit('check-answer',false);
-                return false
+                this.$emit('play-effect', 'WrongSound',)
+                this.$emit('add-record',[this.answer, this.options,"錯誤"])
+                this.UpdateQuestion();
             }
         }
     }

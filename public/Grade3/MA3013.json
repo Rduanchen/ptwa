@@ -1,38 +1,38 @@
 {
     "id": "MA3013",
     "introvideo": "src",
-    "TotalLevel": 6,
+    "TotalLevel": 5,
     "GameType": "NumberInputGame",
     "Questions": [
         {
-            "Question": "Text1",
-            "Answer": "123",
-            "img":"cover_info.png"
+            "Question": "請問左方的圖片是多少平方公分呢",
+            "Answer": "6",
+            "img": "level1.png",
+            "img_alt":"一個方格板上面有積木"
         },
         {
-            "Question": "Text2",
-            "Answer": "123",
-            "img":"cover_info.png"
+            "Question": "請問左方的圖片是多少平方公分呢",
+            "Answer": "6",
+            "img": "level2.png",
+            "img_alt":"一個方格板上面有積木"
         },
         {
-            "Question": "Text3",
-            "Answer": "123",
-            "img":"cover_info.png"
+            "Question": "請問左方的圖片是多少平方公分呢",
+            "Answer": "7",
+            "img": "level3.png",
+            "img_alt":"一個方格板上面有積木"
         },
         {
-            "Question": "Text4",
-            "Answer": "123",
-            "img":"cover_info.png"
+            "Question": "請問左方的圖片是多少平方公分呢",
+            "Answer": "6",
+            "img": "level4.png",
+            "img_alt":"一個方格板上面有積木"
         },
         {
-            "Question": "Text5",
-            "Answer": "123",
-            "img":"cover_info.png"
-        },
-        {
-            "Question": "Text6",
-            "Answer": "123",
-            "img":"cover_info.png"
+            "Question": "請問左方的圖片是多少平方公分呢",
+            "Answer": "6",
+            "img":"level5.png",
+            "img_alt":"一個方格板上面有積木"
         }
     ]
 }

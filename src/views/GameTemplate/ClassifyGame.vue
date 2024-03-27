@@ -1,40 +1,31 @@
 <template>
     <div class="container">
-        <div class="card mb-3">
-            <h1>{{QuestionWord}}</h1>
+        <div class=" d-flex flex-row justify-content-center">
+            <p class="class h1 align-self-center">{{QuestionWord}}</p>
         </div>
-        <div class="row justify-content-between">
-            <div class="col-7 align-content-between">
-                <h1>Chosen</h1>
-                <draggable :list="this.Items" group="SelectItem" class="card">
+        <div class="row justify-content-between d-flex flex-row align-items-stretch justify-content-center">
+            <div class="col-6 align-content-between">
+                <p class="h2">{{ this.GameData.Question[0].InitBox }}</p>
+                <draggable :list="this.Items" item-key="id" :sort="false" group="SelectItem" style="width: 100%;" class="card d-flex flex-row justify-content-center flex-wrap col-12 col-md-6 col-lg-4">
                     <template #item="{ element }">
-                        <button type="button" class="btn btn-primary m-1">{{ element }}</button>
+                        <cardwithbutton :imageURL="element['img']" :Text="element['text']" :altText="element['alt']" class="mx-auto my-2"></cardwithbutton>
                     </template>
                 </draggable>
             </div>
-            <div class="col-5">
-
-                <h1>{{ answer[0].GroupName }}</h1>
-                <div class="row">
-                    <draggable :list="Group1" group="SelectItem" class="card">
-                        <template #item="{ element }">
-                            <button type="button" class="btn btn-primary m-1">{{ element }}</button>
-                        </template>
-                    </draggable>
+            <div class="col-6"> 
+                <div v-for="(items,index) in Groups">
+                    <h1>{{ this.GameData.Answer[index].GroupName }}</h1>
+                    <div class="row">
+                        <draggable :list="Groups[index]" item-key="id" :sort="false" group="SelectItem" class="card d-flex flex-row justify-content-center flex-wrap">
+                            <template #item="{ element }">
+                                <cardwithbutton :imageURL="element['img']" :Text="element['text']" :altText="element['alt']" class="mx-auto my-2"></cardwithbutton>
+                            </template>
+                        </draggable>
+                    </div>
                 </div>
-
-                <h1>{{ answer[1].GroupName }}</h1>
-                <div class="row">
-                    <draggable :list="Group2" group="SelectItem" class="card">
-                        <template #item="{ element }">
-                            <button type="button" class="btn btn-primary m-1">{{ element }}</button>
-                        </template>
-                    </draggable>
-                </div>
-
             </div>
             <div class="row">
-                <button type="button" class="btn btn-primary m-3" v-on:click="CheckAnswer()">Submit</button>
+                <button type="button" class="btn btn-primary m-3" v-on:click="CheckAnswer()">送出答案</button>
             </div>
         </div>
     </div>
@@ -74,18 +65,26 @@
         }
  */
 import draggable from 'vuedraggable';
+import cardwithbutton from '@/components/cardwithbutton.vue'
+import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 export default {
     name: 'ClassifyGame',
     components: {
-        draggable
+        draggable,
+        cardwithbutton
     },
+    emits: ['play-effect','add-record','next-level'],
     props: {
-        question: {
-            type: Array,
+        GameData: {
+          type: Object,
+          required: true
+        },
+        GameConfig:{
+            type: Object,
             required: true
         },
-        answer: {
-            type: Array,
+        id:{
+            type: String,
             required: true
         }
     },
@@ -93,61 +92,61 @@ export default {
         return {
             QuestionWord: '',
             GroupID:0,
-            Group1:[],
-            Group2:[],
+            // Group1:[],
+            // Group2:[],
+            Groups:[],
             Items:[],
         }
     },
     created(){
-        this.QuestionWord=this.question[0].Question
+        // this.icon= icon1;
+        this.QuestionWord=this.GameData.Question[0].Question
+        for(var i in this.GameData.Answer){
+            this.Groups.push([])
+        }
+        // this.QuestionWord=this.question[0].Question
         console.log(this.QuestionWord)
-        for(var i=1;i<this.question.length;i++){
-            this.Items.push(this.question[i].text)
+        for(var i=1;i<this.GameData.Question.length;i++){
+            let temp={
+                "text":this.GameData.Question[i].text,
+                "img":GamesGetAssetsFile(this.id,this.GameData.Question[i].img),
+                "alt":this.GameData.Question[i].alt
+            };
+            console.log(temp.img)
+            this.Items.push(temp);
         }
     },
     methods: {
         CheckAnswer(){
             // This code will walk through all the groups and check if the answer is right
             // Only when all the groups are right, the game will return true.
-            if(this.Group1.length==this.answer[0]["Items"].length && this.Group2.length==this.answer[1]["Items"].length){
-                var Group1Status=true
-                var Group1Check=0
-                var Group2Status=true
-                var Group2Check=0
-                for(var i in this.Group1){
-                    for(var z in this.answer[0]["Items"]){
-                        if(this.Group1[i]==this.answer[0]["Items"][z]){
-                            Group1Check=1
-                            break
-                        }
-                    }
-                    if(Group1Check!=1){
-                        Group1Status=false
-                    }
-                }
-                for(var i in this.Group2){
-                    for(var z in this.answer[1]["Items"]){
-                        if(this.Group2[i]==this.answer[1]["Items"][z]){
-                            Group2Check=1
-                            break
-                        }
-                    }
-                    if(Group2Check!=1){
-                        Group2Status=false
-                    }
-                }
-                if(Group1Status && Group2Status == true){
-                    console.log('ClassifyGame CheckAnswer :Right')
-                    this.$emit('check-answer',true)
-                }
-                else{
+
+            var member=0;
+            for(var i in this.Groups){
+                if(this.Groups[i].length!=this.GameData.Answer[i]["Items"].length){
                     console.log('ClassifyGame CheckAnswer :Wrong')
-                    this.$emit('check-answer',false)
+                    this.$emit('play-effect', 'WrongSound',)
+                    this.$emit('add-record',[this.Groups[i], this.GameData.Answer[i]["Items"],"錯誤"])
+                    console.log('here')
+                    return
                 }
-            }
-            else{
-                console.log('ClassifyGame CheckAnswer :Wrong')
-                this.$emit('check-answer',false)
+                for(var z in this.Groups[i]){
+                    if(this.GameData.Answer[i]["Items"].includes(this.Groups[i][z].text)){
+                        member++;
+                    }
+                }
+                console.log(member)
+                if (member!=this.GameData.Answer[i]["Items"].length){
+                    console.log('ClassifyGame CheckAnswer :Wrong')
+                    this.$emit('play-effect', 'WrongSound',)
+                    this.$emit('add-record',[this.Groups[i], this.GameData.Answer[i]["Items"],"錯誤"])
+                    console.log('there')
+                    return
+                }
+                member=0;
+                this.$emit('add-record',[this.Groups[i], this.GameData.Answer[i]["Items"],"正確"])
+                this.$emit('play-effect', 'CorrectSound',)
+                this.$emit('next-question')
             }
         }
     }
